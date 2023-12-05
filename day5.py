@@ -1,8 +1,30 @@
+import time
+
+startTime = time.time()
+
 seeds = []
 seedToSoil = []
 seedToFertilizer = []
+fertilizerToWater = []
+waterToLight = []
+lightToTemperature = []
+temperatureToHumidity = []
+humidityToLocation = []
+
+locations = []
 
 currentRead = "seeds"
+
+def convertTo(seeds, array_):
+    array_Result = -1
+    for array___ in range(len(array_)):
+        array__ = array_[array___]
+        if seeds >= array__[1] and seeds < array__[1] + array__[2]:
+            offset = array__[0] - array__[1]
+            result = seeds + offset
+            array_Result = result
+    if array_Result == -1: array_Result = seeds
+    return array_Result
 
 with open("data/day5.txt", "r") as f:
     data = f.readlines()
@@ -30,30 +52,28 @@ with open("data/day5.txt", "r") as f:
             seedToSoil.append([int(line[0]), int(line[1]), int(line[2])])
         elif currentRead == "soil-to-fertilizer" and line[0] != "soil-to-fertilizer" and line[0] != "":
             seedToFertilizer.append([int(line[0]), int(line[1]), int(line[2])])
+        elif currentRead == "fertilizer-to-water" and line[0] != "fertilizer-to-water" and line[0] != "":
+            fertilizerToWater.append([int(line[0]), int(line[1]), int(line[2])])
+        elif currentRead == "water-to-light" and line[0] != "water-to-light" and line[0] != "":
+            waterToLight.append([int(line[0]), int(line[1]), int(line[2])])
+        elif currentRead == "light-to-temperature" and line[0] != "light-to-temperature" and line[0] != "":
+            lightToTemperature.append([int(line[0]), int(line[1]), int(line[2])])
+        elif currentRead == "temperature-to-humidity" and line[0] != "temperature-to-humidity" and line[0] != "":
+            temperatureToHumidity.append([int(line[0]), int(line[1]), int(line[2])])
+        elif currentRead == "humidity-to-location" and line[0] != "humidity-to-location" and line[0] != "":
+            humidityToLocation.append([int(line[0]), int(line[1]), int(line[2])])
 
-#for seed_ in range(len(seeds)):
-for seed_ in range(1):
+for seed_ in range(len(seeds)):
     seed = int(seeds[seed_])
-    print(seed)
+    seed = convertTo(seed, seedToSoil)
+    seed = convertTo(seed, seedToFertilizer)
+    seed = convertTo(seed, fertilizerToWater)
+    seed = convertTo(seed, waterToLight)
+    seed = convertTo(seed, lightToTemperature)
+    seed = convertTo(seed, temperatureToHumidity)
+    seed = convertTo(seed, humidityToLocation)
 
-    seedToSoilResult = -1
-    for seedToSoil__ in range(len(seedToSoil)):
-        seedToSoil_ = seedToSoil[seedToSoil__]
-        if seed >= seedToSoil_[1] and seed < seedToSoil_[1] + seedToSoil_[2]:
-            offset = seedToSoil_[0] - seedToSoil_[1]
-            result = seed + offset
-            seedToSoilResult = result
-    if seedToSoilResult == -1: seedToSoilResult = seed
-    seed = seedToSoilResult
-    print(seedToSoilResult)
+    locations.append(seed)
 
-    seedToFertilizerResult = -1
-    for seedToFertilizer__ in range(len(seedToFertilizer)):
-        seedToFertilizer_ = seedToFertilizer[seedToFertilizer__]
-        if seed >= seedToFertilizer_[1] and seed < seedToFertilizer_[1] + seedToFertilizer_[2]:
-            offset = seedToFertilizer_[0] - seedToFertilizer_[1]
-            result = seed + offset
-            seedToFertilizerResult = result
-    if seedToFertilizerResult == -1: seedToFertilizerResult = seed
-    seed = seedToFertilizerResult
-    print(seedToFertilizerResult)
+print("completed in: " + str(round((time.time() - startTime) * 100000) / 100) + "ms")
+print(min(locations))
