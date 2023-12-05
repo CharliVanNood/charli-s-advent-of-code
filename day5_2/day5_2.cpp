@@ -24,6 +24,7 @@ int main()
 	}
 	file.close();
 
+	int line__ = 0;
 	for (int line_ = 0; line_ < sizeof(data) / sizeof(string); line_++) {
 		string line = data[line_];
 		if (line != "") {
@@ -56,9 +57,17 @@ int main()
 				lineSplit[0] == "humidity-to-location"
 				) {
 				currentRead = lineSplit[0];
+				line__ = 0;
 			}
 
-			if (currentRead == "seed-to-soil")
+			if (currentRead == "seed-to-soil" && lineSplit[0] != currentRead) {
+				cout << lineSplit[0] << endl;
+				seedToSoil[line__][0] = lineSplit[0];
+				seedToSoil[line__][1] = lineSplit[1];
+				seedToSoil[line__][2] = lineSplit[2];
+			}
+
+			line__++;
 		}
 	}
 }
